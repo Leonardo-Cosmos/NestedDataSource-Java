@@ -39,7 +39,9 @@ class XmlDataSource extends FileDataSource {
 		super(file);
 		
 		Matcher matcher = FILE_NAME_PATTERN.matcher(file.getName());
-		rootELementName = matcher.group(FILE_NAME_GROUP_NAME);
+		if (matcher.matches()) {
+			rootELementName = matcher.group(FILE_NAME_GROUP_NAME);
+		}
 	}
 
 	@Override
