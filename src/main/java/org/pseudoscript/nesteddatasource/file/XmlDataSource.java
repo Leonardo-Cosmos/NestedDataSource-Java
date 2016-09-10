@@ -25,7 +25,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
 class XmlDataSource extends FileDataSource {
@@ -141,15 +140,20 @@ class XmlDataSource extends FileDataSource {
 	}
 	
 	private void loadData(Element dataElement, String keyBase) {
-		NodeList employeeNodeList = dataElement.getChildNodes();
-		for (int i = 0; i < employeeNodeList.getLength(); i++) {
-			Node node = employeeNodeList.item(i);
-			if (node instanceof Element) {
+		NodeList childElementList = dataElement.getElementsByTagName("*");
+		if (childElementList.getLength() > 0) {
+			for (int i = 0; i < childElementList.getLength(); i++) {
+				Node node = childElementList.item(i);
 				Element element = (Element) node;
-				loadData((Element) node, keyBase + element.getNodeName());
-			} else if (node instanceof Text) {
-				dataMap.put(keyBase, dataElement.getTextContent());
+				if (keyBase.isEmpty()) {
+					loadData(element, element.getNodeName());
+				} else {
+					String childKeyBase = keyBase + DataSource.SEPARATOR + element.getNodeName();
+					loadData(element, childKeyBase);
+				}
 			}
+		} else {
+			dataMap.put(keyBase, dataElement.getTextContent());
 		}
 	}
 }
