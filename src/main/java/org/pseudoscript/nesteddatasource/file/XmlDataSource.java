@@ -33,6 +33,7 @@ class XmlDataSource extends FileDataSource {
 	private static final String FILE_NAME_GROUP_NAME = "name";
 	
 	protected String rootELementName;
+	protected Object rootData;
 	
 	public XmlDataSource(File file) {
 		super(file);
@@ -57,8 +58,12 @@ class XmlDataSource extends FileDataSource {
 		Element rootElement = document.createElement(rootELementName);
 		document.appendChild(rootElement);
 		
-		for (Entry<String, Object> entry : dataMap.entrySet()) {
-			saveData(document, rootElement, entry.getKey(), entry.getValue().toString());
+		if (rootData != null) {
+			rootElement.appendChild(document.createTextNode(rootData.toString()));
+		} else {
+			for (Entry<String, Object> entry : dataMap.entrySet()) {
+				saveData(document, rootElement, entry.getKey(), entry.getValue().toString());
+			}
 		}
 		
 		TransformerFactory tf = TransformerFactory.newInstance();
@@ -101,6 +106,7 @@ class XmlDataSource extends FileDataSource {
 				currentElement.appendChild(parentElement);
 			}
 			
+			// Enter next level.
 			currentElement = parentElement;
 		}
 		
@@ -153,7 +159,11 @@ class XmlDataSource extends FileDataSource {
 				}
 			}
 		} else {
-			dataMap.put(keyBase, dataElement.getTextContent());
+			if (keyBase.isEmpty()) {
+				rootData = dataElement.getTextContent();
+			} else {
+				dataMap.put(keyBase, dataElement.getTextContent());
+			}
 		}
 	}
 }
