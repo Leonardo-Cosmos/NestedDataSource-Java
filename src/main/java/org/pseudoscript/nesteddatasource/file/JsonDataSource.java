@@ -70,7 +70,7 @@ class JsonDataSource extends FileDataSource {
 					loadData(childObject, childKeyBase);
 				}
 			} else if (child instanceof String) {
-				dataMap.put(keyBase, (String) child);
+				dataMap.put(keyBase + DataSource.SEPARATOR + key, (String) child);
 			}
 		}
 	}
