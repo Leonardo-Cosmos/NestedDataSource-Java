@@ -12,4 +12,4 @@ No matter key-value pair or any other data structure, a physical structure shoul
 Nested Data Source
 ------------------
 If key-value pair whose key is multiple level is serialized in a data source, it can be considered as a series of data sources which are nested one by another one.<br/>
-This project defines an interface describing nested data source. File system and data nestable file format (XML, JSON, properties) are used as implementation of such interface.<br/>
+This project defines an interface describing nested data source. File system and data nestable file format (XML, JSON, Properties) are used as implementation of such interface.<br/>
